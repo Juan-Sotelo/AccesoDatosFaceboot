@@ -111,7 +111,13 @@ async function main() {
                     console.log("3");
                     break;
                 case 4:
-                    console.log("4");
+                    try{
+                        publicaciones= await PublicacionesDAO.obtenerTodas();
+                        console.log("Publicaciones guardadas ");
+                        console.log(publicaciones);
+                    }catch(error){
+                        console.error(error);
+                    }
                     break;
                 case 5:
                     contenido= readline.question("Ingrese el contenido de la publicacion al que agregara el comentario: ");
