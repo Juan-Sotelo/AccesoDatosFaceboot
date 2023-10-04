@@ -1,3 +1,4 @@
+//Alex García, Juan Sotelo, Carlos Valle
 const Usuario = require('../models/Usuario')
 
 class UsuariosDAO {

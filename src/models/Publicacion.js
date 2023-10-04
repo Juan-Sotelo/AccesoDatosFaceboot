@@ -1,13 +1,10 @@
+//Alex García, Juan Sotelo, Carlos Valle
 const mongoose = require('mongoose')
 const Usuario = require('./Usuario')
 
 const Schema = mongoose.Schema
 
 const comentarioSchema = new Schema ({
-    _id: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true
-    },
     usuarioID: {
         type: mongoose.Schema.Types.ObjectId,
         ref: Usuario,
@@ -25,13 +22,9 @@ const comentarioSchema = new Schema ({
         type: String,
         required: false
     }
-})
+}, { versionKey: false })
 
 const publicacionSchema = new Schema ({
-    _id: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true
-    },
     usuarioID: {
         type: mongoose.Schema.Types.ObjectId,
         ref: Usuario,
@@ -50,7 +43,7 @@ const publicacionSchema = new Schema ({
         required: false
     },
     comentarios: [comentarioSchema] 
-})
+}, { versionKey: false })
 
 const Publicacion = mongoose.model('Publicacion', publicacionSchema)
 

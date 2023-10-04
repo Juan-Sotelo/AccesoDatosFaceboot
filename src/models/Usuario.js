@@ -1,3 +1,4 @@
+//Alex García, Juan Sotelo, Carlos Valle
 const mongoose = require('mongoose')
 const bcrypt = require('bcryptjs')
 
@@ -21,7 +22,7 @@ const usuarioSchema = new Schema({
         type: Date,
         required: true
     }
-});
+}, { versionKey: false });
 
 usuarioSchema.methods.encriptarContrasenia = async function (contrasenia) {
    const salt = await bcrypt.genSalt(10)

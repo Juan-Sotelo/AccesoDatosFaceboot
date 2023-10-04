@@ -1,3 +1,4 @@
+//Alex García, Juan Sotelo, Carlos Valle
 const Publicacion = require('../models/Publicacion')
 
 class PublicacionesDAO {
@@ -14,6 +15,15 @@ class PublicacionesDAO {
     static async obtener(id) {
         try {
             const publicacion = await Publicacion.findOne({ _id:id })
+            return publicacion;
+        } catch (error) {
+            throw error
+        }
+    }
+
+    static async obtenerPorContenido(contenido){
+        try {
+            const publicacion = await Publicacion.findOne({ texto:contenido });
             return publicacion;
         } catch (error) {
             throw error
