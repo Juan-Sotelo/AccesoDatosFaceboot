@@ -106,6 +106,15 @@ class PublicacionesDAO {
 
     }
 
+    static async obtenerComentario(comentario) {
+        try {
+            const comentarios = await Publicacion.findOne({'comentarios.texto':comentario}); 
+            return comentarios
+        } catch (error) {
+            throw error
+        }
+    }
+
     static async eliminarComentario(publicacionId, comentarioId) {
         try {
             const resultado = await Publicacion.findOneAndUpdate({

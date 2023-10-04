@@ -3,6 +3,7 @@ require('./database/database');
 const readline = require('readline-sync');
 const UsuariosDAO = require('./DAOs/UsuariosDAO');
 const PublicacionesDAO = require('./DAOs/PublicacionesDAO');
+const Publicacion = require('./models/Publicacion')
 const mongoose = require('mongoose');
 
 main();
@@ -105,10 +106,53 @@ async function main() {
                     }
                     break;
                 case 2:
-                    console.log("2");
+                    contenido= readline.question("Ingrese el contenido de la publicacion que desea editar: ");
+                    try{
+                        publicacionExistente= await PublicacionesDAO.obtenerPorContenido(contenido);
+                        if(publicacionExistente != null){
+                            contenido= readline.question("Proporcione el nuevo contenido de la publicacion: ");
+                            img= readline.question("Ingrese la url de la imagen: ");
+                            publicacionExistente.texto= contenido; 
+                            publicacionExistente.img= img;
+                            publicacionEditada= await PublicacionesDAO.editar(publicacionExistente._id, publicacionExistente);
+                            console.log("Publicación Editada con éxito");
+                        }
+                        else{
+                            console.log("Publicación Inexistente");
+                        }
+                    }catch(error){
+                        console.error(error);
+                    }
                     break;
                 case 3:
-                    console.log("3");
+                    contenido= readline.question("Ingrese el contenido de la publicacion a eliminar: ");
+                    while(true){
+                    try{
+                        publicacionExistente= await PublicacionesDAO.obtenerPorContenido(contenido);
+                        if(publicacionExistente !=null){
+                            console.log(" ");
+                            confirmacion= readline.question("¿Seguro que desea eliminar la publicacion? Si/No ");
+                            if(confirmacion.toLowerCase() == "si"){
+                                publicacionEliminada= await PublicacionesDAO.eliminar(publicacionExistente._id);
+                                console.log("Publicación Eliminada con éxito. ");
+                                break;
+
+                            } else if(confirmacion.toLowerCase() == "no"){
+                                break;
+
+                            } else{
+                                console.log("Favor de introducir solo 'Si' o 'No' ");
+                            }
+                        }
+                        else{
+                            console.log("Publicación Inexistente. ");
+                            break;
+                        }
+                    }catch(error){
+                        console.error(error);
+                        break;
+                    }
+                }
                     break;
                 case 4:
                     try{
@@ -141,7 +185,36 @@ async function main() {
                     }
                     break;
                 case 6:
-                    console.log("6");
+                    contenido= readline.question("Ingrese el contenido de la publicacion donde se encuentra el comentario a editar: ");
+                    try{
+                        publicacionExistente= await PublicacionesDAO.obtenerPorContenido(contenido);
+                        if(publicacionExistente !=null){
+                            usuario= readline.question("Ingrese el nombre de usuario del comentario a editar: ");
+                            usuarioExistente= await UsuariosDAO.obtenerPorUsername(usuario);
+                            comentario= readline.question("Ingrese el comentario a modificar: ");
+                            comentarioExistente= await PublicacionesDAO.obtenerComentario(comentario);
+                            if(comentarioExistente !=null){
+                            nuevoComentario = readline.question("Ingrese el nuevo contenido del comentario: ");
+                            img = readline.question("Ingrese la URL de la imagen: ");
+                                comentarioAEditar = {
+                                    usuarioID: usuarioExistente._id,
+                                    fechaCreacion: fechaActual,
+                                    texto: nuevoComentario,
+                                    img: img
+                                };
+                            resultadoComentario= await PublicacionesDAO.editarComentario(publicacionExistente._id, comentarioExistente._id, comentarioAEditar);
+                            console.log("Comentario Editado con éxito");
+                            }
+                            else{
+                                console.log("Comentario Inexistente.");
+                            }
+                    }
+                        else{
+                            console.log("Publicación Inexistente.");
+                        }
+                    }catch(error){
+                        console.error(error);
+                    }
                     break;
                 case 7:
                     console.log("7");
