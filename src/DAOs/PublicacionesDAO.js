@@ -14,16 +14,16 @@ class PublicacionesDAO {
 
     static async obtener(id) {
         try {
-            const publicacion = await Publicacion.findOne({ _id:id })
+            const publicacion = await Publicacion.findOne({ _id: id })
             return publicacion;
         } catch (error) {
             throw error
         }
     }
 
-    static async obtenerPorContenido(contenido){
+    static async obtenerPorContenido(contenido) {
         try {
-            const publicacion = await Publicacion.findOne({ texto:contenido });
+            const publicacion = await Publicacion.findOne({ texto: contenido });
             return publicacion;
         } catch (error) {
             throw error
@@ -108,8 +108,8 @@ class PublicacionesDAO {
 
     static async obtenerComentario(comentario) {
         try {
-            const comentarios = await Publicacion.findOne({'comentarios.texto':comentario}); 
-            return comentarios
+            const comentarios = await Publicacion.findOne({ 'comentarios': {$elemMatch: {'texto':comentario}} }, {'comentarios.$':1});
+            return comentarios.comentarios[0];
         } catch (error) {
             throw error
         }
@@ -120,11 +120,12 @@ class PublicacionesDAO {
             const resultado = await Publicacion.findOneAndUpdate({
                 _id: publicacionId,
             }, {
-                $pull : { comentarios : { _id : comentarioId } } } );
-            } catch (error) {
-                throw error
-            }
-            
+                $pull: { comentarios: { _id: comentarioId } }
+            });
+        } catch (error) {
+            throw error
+        }
+
     }
 }
 
