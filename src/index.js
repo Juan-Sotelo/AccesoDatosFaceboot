@@ -212,7 +212,37 @@ async function main() {
                     }
                     break;
                 case 7:
-                    console.log("7");
+                    contenido = readline.question("Ingrese el contenido de la publicacion donde se encuentra el comentario a eliminar: ");
+                    comentario= readline.question("Ingrese el comentario a eliminar: ");
+                    while (true) {
+                        try {
+                            publicacionExistente = await PublicacionesDAO.obtenerPorContenido(contenido);
+                            comentarioExistente= await PublicacionesDAO.obtenerComentario(comentario);
+                            if (publicacionExistente != null && comentarioExistente !=null) {
+                                console.log(comentarioExistente);
+                                console.log(" ");
+                                confirmacion = readline.question("¿Seguro que desea eliminar el comentario? Si/No ");
+                                if (confirmacion.toLowerCase() == "si") {
+                                    comentarioEliminado = await PublicacionesDAO.eliminarComentario(publicacionExistente._id, comentarioExistente._id);
+                                    console.log("Comentario Eliminado con éxito. ");
+                                    break;
+
+                                } else if (confirmacion.toLowerCase() == "no") {
+                                    break;
+
+                                } else {
+                                    console.log("Favor de introducir solo 'Si' o 'No' ");
+                                }
+                            }
+                            else {
+                                console.log("Publicación o Comentario Inexistente. ");
+                                break;
+                            }
+                        } catch (error) {
+                            console.error(error);
+                            break;
+                        }
+                    }
                     break;
                 default:
                     break;
