@@ -1,7 +1,9 @@
 const express = require('express')
 const router = express.Router();
-const publicacionController = require('../controllers/ControladorPublicacion')
+const controladorPublicacion = require('../controllers/ControladorPublicacion')
 
 
-router.post('/publicacion', publicacionController.addPublicacion);
-router.get('/publicacion/:id', publicacionController.getPublicacion);
+router.post('/publicacion', controladorPublicacion.addPublicacion);
+router.get('/publicacion/:id', controladorPublicacion.getPublicacion);
+
+module.exports = router;

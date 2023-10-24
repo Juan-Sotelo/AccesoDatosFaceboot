@@ -1,9 +1,9 @@
 const Publicacion = require('../models/Publicacion');
-const PublicacionesDAO = require('../data/PublicacionesDAO');
-require('../data/database');
+const PublicacionesDAO = require('../DAOs/PublicacionesDAO');
+require('../database/database');
 
 
-class PublicacionesController {
+class ControladorPublicacion {
     static async addPublicacion(req, res) {
         try {
 
@@ -201,4 +201,4 @@ class PublicacionesController {
 
 }
 
-module.exports = PublicacionesController;
+module.exports = ControladorPublicacion;
