@@ -35,6 +35,17 @@ exports.eliminarUsuario= async (username) => {
     }
 };
 
+exports.editarUsuario= async (id, usuario) => {
+    try{
+        await mongoose.connect(MONGO_URI);
+        resultado= await UsuariosDAO.editar(id, usuario);
+        mongoose.connection.close();
+        return resultado;
+    }catch (error){
+        return error;
+    }
+}
+
 exports.actualizarUsuario= async (usernameActual, usuario) => {
     try{
         await mongoose.connect(MONGO_URI);

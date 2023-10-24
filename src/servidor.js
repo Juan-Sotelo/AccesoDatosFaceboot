@@ -4,11 +4,14 @@ const port= 2222;
 
 app.use(express.json());
 
+const routerAuth= require('./routers/RouterAuth');
+app.use('/auth', routerAuth);
+
 const routerUsuarios = require('./routers/RouterUsuarios');
 app.use('/usuarios', routerUsuarios);
 
 const routerPublicaciones = require('./routers/RouterPublicacion');
-app.use(routerPublicaciones);
+app.use('/publicaciones', routerPublicaciones);
 
 app.use((err, req, res, next) => {
     console.error(err.stack);
