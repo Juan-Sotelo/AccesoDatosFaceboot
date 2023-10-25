@@ -7,12 +7,10 @@ const llave= process.env.LLAVE;
 
 // Rutas
 router.post('/iniciarSesion', (req, res)=>{
-
-    return controladorUsuarios.loginUsuario(req, res)
+    return controladorUsuarios.iniciarSesion(req.body.username, req.body.contrasenia)
     .then(resultado =>{
-        res.json(resultado);
+        console.log(resultado);
         if(!resultado || resultado.contrasenia!=req.body.contrasenia){
-            console.log('Credenciales inválidas.');
             res.status(401).json({error:'Credenciales inválidas'});
         }else{
             const expiresIn= '1h';
@@ -22,9 +20,9 @@ router.post('/iniciarSesion', (req, res)=>{
         }
     })
     .catch(error=> {
-        console.error('Error en el bloque catch:', error);
-        res.status(500).json({error: 'Error jijiji'});
+        res.status(500).json({error:error});
     })
 });
+
 
 module.exports = router;

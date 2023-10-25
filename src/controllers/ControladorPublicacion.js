@@ -39,10 +39,10 @@ class ControladorPublicacion {
     }
 
     static async getPublicacionContenido(req, res) {
-        const contenido = req.query.contenido;
-
+        const contenido = req.body.texto;
+        
         try {
-            const publicacion = await Publicacion.obtenerPorContenido(contenido);
+            const publicacion = await PublicacionesDAO.obtenerPorContenido(contenido);
 
             if (!publicacion) {
                 return res.status(404).json({ error: 'Publicación no encontrada' });
@@ -143,6 +143,7 @@ class ControladorPublicacion {
             }
 
             const comentario = {
+                usuarioID: req.user._id,
                 texto: req.body.texto,
                 img: req.body.img
             }
@@ -161,8 +162,8 @@ class ControladorPublicacion {
     }
 
     static async getComentario(req, res) {
-        const contenido = req.query.contenido;
-
+        const contenido = req.body.texto;
+        console.log(contenido)
         try {
             const comentario = await PublicacionesDAO.obtenerComentario(contenido);
 
@@ -188,10 +189,6 @@ class ControladorPublicacion {
             }
 
             const comentarioEliminado = await PublicacionesDAO.eliminarComentario(publicacionId, comentarioId);
-
-            if (!comentarioEliminado) {
-                return res.status(404).json({ error: 'No se pudo encontrar el comentario' });
-            }
 
             res.status(204).send();
         } catch (err) {

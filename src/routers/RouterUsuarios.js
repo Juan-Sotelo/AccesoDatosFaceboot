@@ -26,6 +26,6 @@ const verificarToken= (req, res, next)=>{
 };
 
 router.post('/registrarUsuario', controladorUsuarios.addUsuario);
-router.put('/editar', controladorUsuarios.updateUsuario);
+router.put('/editar',verificarToken, controladorUsuarios.updateUsuario);
 
 module.exports = router;

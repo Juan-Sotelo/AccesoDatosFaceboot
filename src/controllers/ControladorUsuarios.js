@@ -22,7 +22,7 @@ class ControladorUsuario {
     }
 
     static async updateUsuario(req, res){
-        const usuarioId= req.params.id;
+        const usuarioId= req.body._id;
 
         try{
             const usuario= await UsuariosDAO.obtenerPorId(usuarioId);
@@ -54,19 +54,14 @@ class ControladorUsuario {
         }
     }
 
-    static async loginUsuario(req, res){
-
-        try{
-            const {username, contrasenia}= req.body; 
-
-            const usuario= await UsuariosDAO.obtenerRegistrado(username, contrasenia);
-
-            if(!usuario){
-                return res.status(401).json({error: 'Usuario inexistente'});
-            }
-
-        }catch(err){
-            res.status(500).json({error: 'Error al iniciar sesión'});
+    static async iniciarSesion(username, contrasenia) {
+        try {
+            
+            const resultado = await UsuariosDAO.obtenerRegistrado(username, contrasenia);
+            return resultado;
+        } catch (err) {
+            
+            return { error: 'Error al iniciar sesión' };
         }
     }
 
