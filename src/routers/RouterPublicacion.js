@@ -24,18 +24,16 @@ const verificarToken= (req, res, next)=>{
     }
 };
 
-router.post('/publicacion' , verificarToken, controladorPublicacion.addPublicacion);
-router.get('/publicacion/:id', controladorPublicacion.getPublicacion);
-router.get('/publicacion', controladorPublicacion.getPublicacionContenido);
-router.put('/publicacion/:id', verificarToken ,controladorPublicacion.updatePublicacion);
-router.delete('/publicacion/:id', verificarToken ,controladorPublicacion.deletePublicacion);
+router.post('/crear', verificarToken, controladorPublicacion.addPublicacion);
+router.get('/:id', controladorPublicacion.getPublicacion);
+router.get('/contenido', controladorPublicacion.getPublicacionContenido);
+router.put('/:id', verificarToken, controladorPublicacion.updatePublicacion);
+router.delete('/:id', verificarToken, controladorPublicacion.deletePublicacion);
 router.get('/', controladorPublicacion.getAllPublicaciones);
 
-router.put('/publicacion/:id/comentario', verificarToken ,controladorPublicacion.addComentario);
+router.put('/:id/comentario', verificarToken, controladorPublicacion.addComentario);
 router.get('/comentario', controladorPublicacion.getComentario);
-router.put('/publicacion/:publicacionId/comentario/:comentarioId', verificarToken , controladorPublicacion.updateComentario)
-router.delete('/publicacion/:publicacionId/comentario/:comentarioId', verificarToken, controladorPublicacion.deleteComentario);
-
-
+router.put('/:publicacionId/comentario/:comentarioId', verificarToken, controladorPublicacion.updateComentario);
+router.delete('/:publicacionId/comentario/:comentarioId', verificarToken, controladorPublicacion.deleteComentario);
 
 module.exports = router;
