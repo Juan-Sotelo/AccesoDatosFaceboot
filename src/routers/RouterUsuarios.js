@@ -24,22 +24,8 @@ const verificarToken= (req, res, next)=>{
         res.status(401).json({error: 'Token inválido'});
     }
 };
-router.put('/registrarUsuario', (req, res)=>{
-    return controladorUsuarios.registrarUsuario(req.body)
-    .then(resultado =>{
-        res.json(resultado);
-    })
-    .catch(error=>{
-        res.status(500).json({error:error});
-    })
-});
-router.post('/editar', verificarToken, (req, res)=>{
-    return controladorUsuarios.editarUsuario(req.body._id, req.body)
-    .then(resultado =>{
-        res.json(resultado);
-    }).catch(error =>{
-        res.status(500).json({error:error});
-    });
-});
+
+router.post('/registrarUsuario', controladorUsuarios.addUsuario);
+router.put('/editar', controladorUsuarios.updateUsuario);
 
 module.exports = router;
