@@ -7,14 +7,7 @@ class ControladorUsuario {
 
     static async addUsuario(req, res) {
         try {
-            const nuevoUsuario = new Usuario({
-                username: req.body.username,
-                contrasenia: req.body.contrasenia,
-                sexo: req.body.sexo,
-                fechaNacimiento: req.body.fechaNacimiento
-            })
-
-            const usuarioObjeto = await UsuariosDAO.registrar(nuevoUsuario);
+            const usuarioObjeto = await UsuariosDAO.registrar(req.body);
             res.status(401).json(usuarioObjeto);
         } catch (error) {
             res.status(500).json({ error: 'Error al intentar agregar un usuario' })
@@ -60,7 +53,6 @@ class ControladorUsuario {
             const resultado = await UsuariosDAO.obtenerRegistrado(username, contrasenia);
             return resultado;
         } catch (err) {
-            
             return { error: 'Error al iniciar sesión' };
         }
     }

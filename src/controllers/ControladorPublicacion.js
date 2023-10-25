@@ -6,16 +6,8 @@ require('../database/database');
 class ControladorPublicacion {
     static async addPublicacion(req, res) {
         try {
-
-            const nuevaPublicacion = new Publicacion({
-                usuarioID: req.user._id,
-                fechaCreacion: new Date(),
-                texto: req.body.texto,
-                img: req.body.img,
-                comentarios: []
-            })
-
-            const publicacionGuardada = await PublicacionesDAO.registrar(nuevaPublicacion);
+            
+            const publicacionGuardada = await PublicacionesDAO.registrar(req.body);
 
             res.status(201).json(publicacionGuardada);
         } catch (error) {
@@ -117,13 +109,7 @@ class ControladorPublicacion {
                 return res.status(404).json({ error: 'ID de publicación no encontrada' });
             }
 
-            const comentarioNuevo = {
-                fechaCreacion: new Date().toISOString(),
-                texto: req.body.texto,
-                img: req.body.img
-            }
-
-            const publicacionActualizada = await PublicacionesDAO.agregarComentario(publicacionId, comentarioNuevo);
+            const publicacionActualizada = await PublicacionesDAO.agregarComentario(publicacionId, req.body);
 
             res.json(publicacionActualizada);
         } catch (err) {

@@ -5,8 +5,8 @@ const Usuario = require('./Usuario')
 const Schema = mongoose.Schema
 
 const comentarioSchema = new Schema ({
-    usuarioID: {
-        type: mongoose.Schema.Types.ObjectId,
+    usertag: {
+        type: String,
         ref: Usuario,
         required: true
     },
@@ -25,8 +25,8 @@ const comentarioSchema = new Schema ({
 }, { versionKey: false })
 
 const publicacionSchema = new Schema ({
-    usuarioID: {
-        type: mongoose.Schema.Types.ObjectId,
+    usertag: {
+        type: String,
         ref: Usuario,
         required: true
     },

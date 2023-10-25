@@ -1,6 +1,7 @@
 const express= require('express');
+require('dotenv').config();
 const app= express();
-const port= 2222;
+const PORT= process.env.PORT;
 
 app.use(express.json());
 
@@ -13,11 +14,9 @@ app.use('/usuarios', routerUsuarios);
 const routerPublicaciones = require('./routers/RouterPublicacion');
 app.use('/publicaciones', routerPublicaciones);
 
-app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).send('Ocurrió un error en el servidor');
-});
+const manejadorErrores= require('./middlewares/ManejadorErrores');
+app.use(manejadorErrores);
 
-app.listen(port, () => {
-    console.log(`Servidor en ejecución en el puerto ${port}`);
+app.listen(PORT, () => {
+    console.log(`Servidor en ejecución en el puerto ${PORT}`);
 });
