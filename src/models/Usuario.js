@@ -1,10 +1,14 @@
 //Alex García, Juan Sotelo, Carlos Valle
-const mongoose = require('mongoose')
-const bcrypt = require('bcryptjs')
+const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
 
 const Schema = mongoose.Schema
 
 const usuarioSchema = new Schema({
+    usertag: {
+        type: String,
+        required: true
+    },
     username: {
         type: String,
         required: true

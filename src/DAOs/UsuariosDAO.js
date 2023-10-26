@@ -32,7 +32,7 @@ class UsuariosDAO {
 
     static async obtenerRegistrado(username, contrasenia) {
         try {
-            const usuario = await Usuario.findOne({ username:username, contrasenia:contrasenia })
+            const usuario = await Usuario.findOne({ username:username, contrasenia:contrasenia }, {'_id': 0})
             return usuario
         } catch (error) {
             throw error

@@ -1,49 +1,31 @@
 const express = require('express');
+require('dotenv').config();
 const router = express.Router();
 const controladorUsuarios = require('../controllers/ControladorUsuarios');
+const jwt = require('jsonwebtoken');
+const llave= process.env.LLAVE;
 
 // Rutas
-router.post('/iniciarSesion', (req, res)=>{
-    return controladorUsuarios.iniciarSesion(req.body.username, req.body.contrasenia)
-    .then(resultado =>{
-        res.json(resultado);
-    })
-    .catch(error=> {
-        res.status(500).json({error:error});
-    })
-});
-router.put('/registrarUsuario', (req, res)=>{
-    return controladorUsuarios.registrarUsuario(req.body)
-    .then(resultado =>{
-        res.json(resultado);
-    })
-    .catch(error=>{
-        res.status(500).json({error:error});
-    })
-});
-router.post('/editarUsuario', (req, res)=>{
-    usuarioNuevo= {
-        username: req.body.username,
-        contrasenia: req.body.contrasenia,
-        sexo: req.body.sexo,
-        fechaNacimiento: req.body.fechaNacimiento
+const verificarToken= (req, res, next)=>{
+    const token= req.header('Authorization');
+
+    if(!token){
+        return res.status(401).json({error:'No se ha proporcionado el token'});
     }
-    return controladorUsuarios.actualizarUsuario(req.body.usernameActual, usuarioNuevo)
-    .then(resultado=>{
-        res.json(resultado);
-    })
-    .catch(error=>{
-        res.status(500).json({error:error});
-    })
-});
-router.delete('/eliminarUsuario', (req, res)=>{
-    return controladorUsuarios.eliminarUsuario(req.body.username)
-    .then(resultado=>{
-        res.json(resultado);
-    })
-    .catch(error=>{
-        res.status(500).json({error:error});
-    })
-})
+
+    try{
+        const tokenSinBearer= token.split(" ")[1];
+        const decoded= jwt.verify(tokenSinBearer, llave);
+        if(req.body.usertag!=decoded.userId){
+            return res.status(401).json({error: 'Usuario del token diferente al de la solicitud'});
+        }
+        next();
+    } catch(error){
+        res.status(401).json({error: 'Token inválido'});
+    }
+};
+
+router.post('/registrarUsuario', controladorUsuarios.addUsuario);
+router.put('/editar',verificarToken, controladorUsuarios.updateUsuario);
 
 module.exports = router;

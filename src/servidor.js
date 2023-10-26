@@ -1,17 +1,22 @@
 const express= require('express');
+require('dotenv').config();
 const app= express();
-const port= 2222;
+const PORT= process.env.PORT;
 
 app.use(express.json());
 
-app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).send('Ocurrió un error en el servidor');
-});
+const routerAuth= require('./routers/RouterAuth');
+app.use('/auth', routerAuth);
 
 const routerUsuarios = require('./routers/RouterUsuarios');
 app.use('/usuarios', routerUsuarios);
 
-app.listen(port, () => {
-    console.log(`Servidor en ejecución en el puerto ${port}`);
+const routerPublicaciones = require('./routers/RouterPublicacion');
+app.use('/publicaciones', routerPublicaciones);
+
+const manejadorErrores= require('./middlewares/ManejadorErrores');
+app.use(manejadorErrores);
+
+app.listen(PORT, () => {
+    console.log(`Servidor en ejecución en el puerto ${PORT}`);
 });
