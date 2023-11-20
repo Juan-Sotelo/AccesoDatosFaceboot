@@ -23,7 +23,7 @@ class PublicacionesDAO {
 
     static async obtenerPorContenido(contenido) {
         try {
-            const publicacion = await Publicacion.findOne({ texto: contenido });
+            const publicacion = await Publicacion.find({ texto: contenido });
             return publicacion;
         } catch (error) {
             throw error

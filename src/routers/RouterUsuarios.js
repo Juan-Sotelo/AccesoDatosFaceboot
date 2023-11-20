@@ -2,6 +2,7 @@ const express = require('express');
 require('dotenv').config();
 const router = express.Router();
 const controladorUsuarios = require('../controllers/ControladorUsuarios');
+const validarUsuarios = require('../middlewares/ValidarUsuarios');
 const jwt = require('jsonwebtoken');
 const llave= process.env.LLAVE;
 
@@ -25,7 +26,7 @@ const verificarToken= (req, res, next)=>{
     }
 };
 
-router.post('/registrarUsuario', controladorUsuarios.addUsuario);
-router.put('/editar',verificarToken, controladorUsuarios.updateUsuario);
+router.post('/', validarUsuarios.validarRegistrarUsuario, controladorUsuarios.addUsuario);
+router.put('/editar',verificarToken, validarUsuarios.validarEditarUsuario, controladorUsuarios.updateUsuario);
 
 module.exports = router;

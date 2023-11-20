@@ -1,9 +1,12 @@
 const express = require('express')
 const router = express.Router();
 const controladorPublicacion = require('../controllers/ControladorPublicacion')
+const validarPublicaciones = require('../middlewares/ValidarPublicaciones')
 
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
+const { validarCrearComentario } = require('../middlewares/ValidarComentarios');
+const ValidarComentarios = require('../middlewares/ValidarComentarios');
 const llave= process.env.LLAVE;
 
 const verificarToken= (req, res, next)=>{
@@ -24,16 +27,16 @@ const verificarToken= (req, res, next)=>{
     }
 };
 
-router.post('/crear', verificarToken, controladorPublicacion.addPublicacion);
+router.post('/crear', verificarToken, validarPublicaciones.validarCrearPublicacion ,controladorPublicacion.addPublicacion);
 router.get('/:id', controladorPublicacion.getPublicacion);
-router.get('/contenido', controladorPublicacion.getPublicacionContenido);
-router.put('/:id', verificarToken, controladorPublicacion.updatePublicacion);
+router.get('/search/contenido',  validarPublicaciones.validarObtenerPorContenido,controladorPublicacion.getPublicacionContenido);
+router.put('/:id', verificarToken, validarPublicaciones.validarEditarPublicacion, controladorPublicacion.updatePublicacion);
 router.delete('/:id', verificarToken, controladorPublicacion.deletePublicacion);
 router.get('/', controladorPublicacion.getAllPublicaciones);
 
-router.put('/:id/comentario', verificarToken, controladorPublicacion.addComentario);
+router.put('/:id/comentario', verificarToken, ValidarComentarios.validarCrearComentario, controladorPublicacion.addComentario);
 router.get('/comentario', controladorPublicacion.getComentario);
-router.put('/:publicacionId/comentario/:comentarioId', verificarToken, controladorPublicacion.updateComentario);
-router.delete('/:publicacionId/comentario/:comentarioId', verificarToken, controladorPublicacion.deleteComentario);
+router.put('/:publicacionId/comentario/:comentarioId', ValidarComentarios.validarEditarComentario, verificarToken, controladorPublicacion.updateComentario);
+router.delete('/:publicacionId/comentario/:comentarioId', verificarToken, ValidarComentarios.validarEliminarComentario, controladorPublicacion.deleteComentario);
 
 module.exports = router;

@@ -9,10 +9,10 @@ const routerAuth= require('./routers/RouterAuth');
 app.use('/auth', routerAuth);
 
 const routerUsuarios = require('./routers/RouterUsuarios');
-app.use('/usuarios', routerUsuarios);
+app.use('/api/v2/usuario', routerUsuarios);
 
 const routerPublicaciones = require('./routers/RouterPublicacion');
-app.use('/publicaciones', routerPublicaciones);
+app.use('/api/v2/publicacion', routerPublicaciones);
 
 const manejadorErrores= require('./middlewares/ManejadorErrores');
 app.use(manejadorErrores);

@@ -6,7 +6,7 @@ require('../database/database');
 class ControladorPublicacion {
     static async addPublicacion(req, res) {
         try {
-            
+            console.log(req.body);
             const publicacionGuardada = await PublicacionesDAO.registrar(req.body);
 
             res.status(201).json(publicacionGuardada);
@@ -31,6 +31,7 @@ class ControladorPublicacion {
     }
 
     static async getPublicacionContenido(req, res) {
+
         const contenido = req.body.texto;
         
         try {
@@ -42,6 +43,7 @@ class ControladorPublicacion {
 
             res.json(publicacion);
         } catch (error) {
+            console.log(error);
             res.status(500).json({ error: 'No se pudo obtener la publicación por contenido' });
         }
     }
@@ -120,16 +122,16 @@ class ControladorPublicacion {
     static async updateComentario(req, res) {
         const publicacionId = req.params.publicacionId;
         const comentarioId = req.params.comentarioId;
-
+        
         try {
+            
             const publicacion = await PublicacionesDAO.obtener(publicacionId);
-
+            
             if (!publicacion) {
                 return res.status(404).json({ error: 'ID de publicación no encontrada' });
             }
 
             const comentario = {
-                usuarioID: req.user._id,
                 texto: req.body.texto,
                 img: req.body.img
             }

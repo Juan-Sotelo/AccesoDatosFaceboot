@@ -8,7 +8,7 @@ class ControladorUsuario {
     static async addUsuario(req, res) {
         try {
             const usuarioObjeto = await UsuariosDAO.registrar(req.body);
-            res.status(401).json(usuarioObjeto);
+            res.status(201).json(usuarioObjeto);
         } catch (error) {
             res.status(500).json({ error: 'Error al intentar agregar un usuario' })
         }
