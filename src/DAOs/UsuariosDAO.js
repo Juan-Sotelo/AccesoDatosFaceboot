@@ -30,6 +30,15 @@ class UsuariosDAO {
         }
     }
 
+    static async obtenerPorUsertag(usertag) {
+        try {
+            const usuario = await Usuario.findOne({usertag:usertag})
+            return usuario
+        } catch (error) {
+            throw error
+        }
+    }
+
     static async obtenerRegistrado(username, contrasenia) {
         try {
             const usuario = await Usuario.findOne({ username:username, contrasenia:contrasenia }, {'_id': 0})

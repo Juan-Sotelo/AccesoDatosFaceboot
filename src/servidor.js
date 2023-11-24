@@ -2,8 +2,14 @@ const express= require('express');
 require('dotenv').config();
 const app= express();
 const PORT= process.env.PORT;
+const cors = require('cors');
 
 app.use(express.json());
+// app.use(cors({
+//     origin: `http://localhost:5500`,
+//     credentials: true
+// }));
+app.use(cors());
 
 const routerAuth= require('./routers/RouterAuth');
 app.use('/auth', routerAuth);

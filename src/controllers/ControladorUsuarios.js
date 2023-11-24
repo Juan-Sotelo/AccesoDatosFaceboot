@@ -7,6 +7,14 @@ class ControladorUsuario {
 
     static async addUsuario(req, res) {
         try {
+            const { usertag } = req.body;
+
+            const usuarioExistente = await UsuariosDAO.obtenerPorUsertag(usertag);
+
+            if(usuarioExistente) {
+                return res.status(400).json({ error: 'El nombre de usuario ya está en uso' });
+            }
+
             const usuarioObjeto = await UsuariosDAO.registrar(req.body);
             res.status(201).json(usuarioObjeto);
         } catch (error) {
