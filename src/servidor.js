@@ -1,14 +1,23 @@
 const express= require('express');
-require('dotenv').config();
-const app= express();
-const PORT= process.env.PORT;
+const socketIo = require('socket.io');
+const http = require('http');
 const cors = require('cors');
 
+require('dotenv').config();
+const PORT= process.env.PORT;
+
+const app= express();
+// const server = http.createServer(app);
+// const io = socketIo(server, {
+//     cors: {
+//       origin: 'http://127.0.0.1:5500', 
+//       methods: ['GET', 'POST'],
+//     },
+//   });
+
+
 app.use(express.json());
-// app.use(cors({
-//     origin: `http://localhost:5500`,
-//     credentials: true
-// }));
+
 app.use(cors());
 
 const routerAuth= require('./routers/RouterAuth');
@@ -22,6 +31,22 @@ app.use('/api/v2/publicacion', routerPublicaciones);
 
 const manejadorErrores= require('./middlewares/ManejadorErrores');
 app.use(manejadorErrores);
+
+
+// io.on('connection', (socket) => {
+//     console.log('Usuario conectado');
+  
+//     // Manejar eventos de Socket.io aquí
+  
+//     socket.on('disconnect', () => {
+//       console.log('Usuario desconectado');
+//     });
+
+//     socket.on('chat message', (msg) => {
+//         console.log('message' + msg);
+//         io.emit('chat message',msg)
+//     })
+//   });
 
 app.listen(PORT, () => {
     console.log(`Servidor en ejecución en el puerto ${PORT}`);

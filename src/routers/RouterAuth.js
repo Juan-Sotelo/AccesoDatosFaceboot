@@ -14,7 +14,11 @@ router.post('/iniciarSesion', validarUsuarios.validarInicioSesion, (req, res)=>{
             res.status(401).json({error:'Credenciales inválidas'});
         }else{
             const expiresIn= '1h';
-            const token= jwt.sign({userId:resultado.usertag},llave,{expiresIn});
+            const token= jwt.sign({userId:resultado.usertag, 
+                username:resultado.username, 
+                contrasenia:resultado.contrasenia, 
+                sexo:resultado.sexo, 
+                fechaNacimiento:resultado.fechaNacimiento},llave,{expiresIn});
             console.log(resultado);
             res.json(token);
         }
