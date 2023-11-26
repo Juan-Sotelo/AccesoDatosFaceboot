@@ -43,15 +43,15 @@ class ValidarUsuario {
 
         const camposEsperados = ['username', 'contrasenia', 'sexo', 'fechaNacimiento', "_id", "usertag"];
         const camposEnviados = Object.keys(req.body);
-        
+
         const camposAdicionales = camposEnviados.filter((campo) => !camposEsperados.includes(campo));
         
         if (camposAdicionales.length > 0) {
             return res.status(400).json({ error: `Campos no permitidos: ${camposAdicionales.join(', ')}` });
         }
 
-        if (!username && !contrasenia && !sexo && !fechaNacimiento) {
-            return res.status(400).json({ error: 'Al menos uno de los campos debe estar presente para editar el usuario' });
+        if (!username || !contrasenia || !sexo || !fechaNacimiento) {
+            return res.status(400).json({ error: 'Todos los campos son obligatorios' });
         }
     
         if (username && typeof username !== 'string') {

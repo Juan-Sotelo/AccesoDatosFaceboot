@@ -54,7 +54,7 @@ class ValidarPublicaciones {
 
         const camposEsperados = ['texto', 'img', 'usertag', 'fechaCreacion'];
         const camposEnviados = Object.keys(req.body);
-        
+   
         const camposAdicionales = camposEnviados.filter((campo) => !camposEsperados.includes(campo));
         
         if (camposAdicionales.length > 0) {
