@@ -17,6 +17,9 @@ const verificarToken= (req, res, next)=>{
     try{
         const tokenSinBearer= token.split(" ")[1];
         const decoded= jwt.verify(tokenSinBearer, llave);
+        
+        console.log(req.body.usertag);
+        console.log(decoded.userId);
         if(req.body.usertag!=decoded.userId){
             return res.status(401).json({error: 'Usuario del token diferente al de la solicitud'});
         }

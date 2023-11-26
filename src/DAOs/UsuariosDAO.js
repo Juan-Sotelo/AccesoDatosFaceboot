@@ -48,12 +48,12 @@ class UsuariosDAO {
         }
     }
     
-    static async editar(id, usuario) {
+    static async editar(usertag, nuevoUsuario) {
         try {
-            const usuarioEditado = await Usuario.findByIdAndUpdate(id, usuario)
-            return usuarioEditado
+            const usuarioEditado = await Usuario.findOneAndUpdate({ usertag: usertag }, nuevoUsuario, { new: true });
+            return usuarioEditado;
         } catch (error) {
-            throw error
+            throw error;
         }
     }
 

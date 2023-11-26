@@ -23,10 +23,10 @@ class ControladorUsuario {
     }
 
     static async updateUsuario(req, res){
-        const usuarioId= req.body._id;
+        const usuarioId= req.body.usertag;
 
         try{
-            const usuario= await UsuariosDAO.obtenerPorId(usuarioId);
+            const usuario= await UsuariosDAO.obtenerPorUsertag(usuarioId);
             
             if(!usuario){
                 return res.status(401).json({error: 'Usuario no encontrado.'});
@@ -52,6 +52,7 @@ class ControladorUsuario {
             res.json(usuarioEditado);
         } catch(err){
             res.status(500).json({error: 'No se pudo editar el Usuario solicitado'});
+            console.log(err);
         }
     }
 

@@ -41,7 +41,7 @@ class ValidarUsuario {
     static async validarEditarUsuario(req, res, next) {
         const { username, contrasenia, sexo, fechaNacimiento } = req.body;
 
-        const camposEsperados = ['username', 'contrasenia', 'sexo', 'fechaNacimiento', "_id"];
+        const camposEsperados = ['username', 'contrasenia', 'sexo', 'fechaNacimiento', "_id", "usertag"];
         const camposEnviados = Object.keys(req.body);
         
         const camposAdicionales = camposEnviados.filter((campo) => !camposEsperados.includes(campo));
