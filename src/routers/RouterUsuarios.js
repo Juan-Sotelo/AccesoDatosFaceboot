@@ -20,6 +20,7 @@ const verificarToken= (req, res, next)=>{
         
         console.log(req.body.usertag);
         console.log(decoded.userId);
+        console.log(req.query.usertag);
         if(req.body.usertag !== decoded.userId && req.query.usertag !== decoded.userId){
             return res.status(401).json({error: 'Usuario del token diferente al de la solicitud'});
         }

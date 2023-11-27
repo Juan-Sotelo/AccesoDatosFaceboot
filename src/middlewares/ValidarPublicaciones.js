@@ -10,23 +10,23 @@ class ValidarPublicaciones {
         const camposAdicionales = camposEnviados.filter((campo) => !camposEsperados.includes(campo));
         
         if (camposAdicionales.length > 0) {
-            return res.status(400).json({ message: `Campos no permitidos: ${camposAdicionales.join(', ')}` });
+            return res.status(400).json({ error: `Campos no permitidos: ${camposAdicionales.join(', ')}` });
         }
     
         if (!texto && !img) {
-            return res.status(400).json({ message: 'Al menos uno de los campos debe estar presente para editar la publicación' });
+            return res.status(400).json({ error: 'Al menos uno de los campos debe estar presente para crear la publicación' });
         }
 
         if (texto && typeof texto !== 'string') {
-            return res.status(400).json({ message: 'El campo texto debe ser una cadena de texto' });
+            return res.status(400).json({ error: 'El campo texto debe ser una cadena de texto' });
         }
 
         if (img && typeof img !== 'string') {
-            return res.status(400).json({ message: 'El campo img debe ser una cadena de texto' });
+            return res.status(400).json({ error: 'El campo img debe ser una cadena de texto' });
         }
 
         if (fechaCreacion && typeof fechaCreacion !== 'string') {
-            return res.status(400).json({ message: 'El campo img debe ser una cadena de texto' });
+            return res.status(400).json({ error: 'El campo img debe ser una cadena de texto' });
         }
     
 
@@ -38,11 +38,11 @@ class ValidarPublicaciones {
 
         
         if (!texto) {
-            return res.status(400).json({ message: 'El campo texto es requerido' });
+            return res.status(400).json({ error: 'El campo texto es requerido' });
         }
 
         if (texto && typeof texto !== 'string') {
-            return res.status(400).json({ message: 'El campo texto debe ser una cadena de texto' });
+            return res.status(400).json({ error: 'El campo texto debe ser una cadena de texto' });
         }
 
         next();
@@ -58,23 +58,23 @@ class ValidarPublicaciones {
         const camposAdicionales = camposEnviados.filter((campo) => !camposEsperados.includes(campo));
         
         if (camposAdicionales.length > 0) {
-            return res.status(400).json({ message: `Campos no permitidos: ${camposAdicionales.join(', ')}` });
+            return res.status(400).json({ error: `Campos no permitidos: ${camposAdicionales.join(', ')}` });
         }
 
         if (!id) {
-            return res.status(400).json({ message: 'Se debe proporcionar el id' });
+            return res.status(400).json({ error: 'Se debe proporcionar el id' });
         }
 
         if (!texto && !img) {
-            return res.status(400).json({ message: 'Al menos uno de los campos (texto o img) debe estar presente para editar la publicación' });
+            return res.status(400).json({ error: 'Al menos uno de los campos (texto o img) debe estar presente para editar la publicación' });
         }
 
         if (texto && typeof texto !== 'string') {
-            return res.status(400).json({ message: 'El campo texto debe ser una cadena de texto' });
+            return res.status(400).json({ error: 'El campo texto debe ser una cadena de texto' });
         }
 
         if (img && typeof img !== 'string') {
-            return res.status(400).json({ message: 'El campo img debe ser una cadena de texto' });
+            return res.status(400).json({ error: 'El campo img debe ser una cadena de texto' });
         }
 
         next();
@@ -84,7 +84,7 @@ class ValidarPublicaciones {
         const { id } = req.params.id;
 
         if (!id) {
-            return res.status(400).json({ message: 'Se debe proporcionar el id' });
+            return res.status(400).json({ error: 'Se debe proporcionar el id' });
         }
         next();
     }
