@@ -33,6 +33,7 @@ router.get('/search/contenido',  validarPublicaciones.validarObtenerPorContenido
 router.put('/:id', verificarToken, validarPublicaciones.validarEditarPublicacion, controladorPublicacion.updatePublicacion);
 router.delete('/:id', verificarToken, controladorPublicacion.deletePublicacion);
 router.get('/', controladorPublicacion.getAllPublicaciones);
+router.get('/paginada/:indice', controladorPublicacion.getPublicacionesPaginadas);
 
 router.put('/:id/comentario', verificarToken, ValidarComentarios.validarCrearComentario, controladorPublicacion.addComentario);
 router.get('/comentario', controladorPublicacion.getComentario);

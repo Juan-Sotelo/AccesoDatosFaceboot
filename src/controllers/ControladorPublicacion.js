@@ -30,6 +30,21 @@ class ControladorPublicacion {
         }
     }
 
+    static async getPublicacionesPaginadas(req, res){
+        const indice= req.params.indice;
+
+        try{
+            const publicaciones= await PublicacionesDAO.consultaPaginadaPublicaciones(indice);
+
+            if(!publicaciones){
+                return res.status(404).json({error: 'No hay más publicaciones'});
+            }
+            res.json(publicaciones);
+        } catch(err) {
+            res.status(500).json({error: 'No se pudieron recuperar las publicaciones'});
+        }
+    }
+
     static async getPublicacionContenido(req, res) {
 
         const contenido = req.body.texto;
