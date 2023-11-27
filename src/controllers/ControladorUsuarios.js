@@ -66,6 +66,18 @@ class ControladorUsuario {
         }
     }
 
+    static async obtenerUsuario(req, res)  {
+        try {
+            const usertag = req.query.usertag;
+            const resultado = await UsuariosDAO.obtenerPorUsertag(usertag);
+            res.json(resultado);
+            return resultado;    
+        } catch (err) {
+            return { error: 'Error obtener usuario' };
+        }
+    }
+
+
 }
 
 module.exports= ControladorUsuario;

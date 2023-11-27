@@ -20,7 +20,7 @@ const verificarToken= (req, res, next)=>{
         
         console.log(req.body.usertag);
         console.log(decoded.userId);
-        if(req.body.usertag!=decoded.userId){
+        if(req.body.usertag !== decoded.userId && req.query.usertag !== decoded.userId){
             return res.status(401).json({error: 'Usuario del token diferente al de la solicitud'});
         }
         next();
@@ -31,5 +31,6 @@ const verificarToken= (req, res, next)=>{
 
 router.post('/', validarUsuarios.validarRegistrarUsuario, controladorUsuarios.addUsuario);
 router.put('/editar',verificarToken, validarUsuarios.validarEditarUsuario, controladorUsuarios.updateUsuario);
+router.get('/',verificarToken, controladorUsuarios.obtenerUsuario)
 
 module.exports = router;
