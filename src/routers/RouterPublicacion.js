@@ -29,7 +29,7 @@ const verificarToken= (req, res, next)=>{
 
 router.post('/crear', verificarToken, validarPublicaciones.validarCrearPublicacion ,controladorPublicacion.addPublicacion);
 router.get('/:id', controladorPublicacion.getPublicacion);
-router.get('/search/contenido',  validarPublicaciones.validarObtenerPorContenido,controladorPublicacion.getPublicacionContenido);
+router.post('/search/contenido',  validarPublicaciones.validarObtenerPorContenido,controladorPublicacion.getPublicacionContenido);
 router.put('/:id', verificarToken, validarPublicaciones.validarEditarPublicacion, controladorPublicacion.updatePublicacion);
 router.delete('/:id', verificarToken, controladorPublicacion.deletePublicacion);
 router.get('/', controladorPublicacion.getAllPublicaciones);
