@@ -50,7 +50,7 @@ class ValidarPublicaciones {
 
     static async validarEditarPublicacion(req, res, next) {
         const { texto, img } = req.body;
-        const { id } = req.params.id;
+        const { id } = req.params;
 
         const camposEsperados = ['texto', 'img', 'usertag', 'fechaCreacion'];
         const camposEnviados = Object.keys(req.body);

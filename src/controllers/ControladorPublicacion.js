@@ -110,7 +110,7 @@ class ControladorPublicacion {
 
             const publicacionEliminada = await PublicacionesDAO.eliminar(publicacionId);
 
-            res.status(204).send();
+            res.status(204).end();
         } catch (err) {
             res.status(500).json({ error: 'No se pudo eliminar la publicación' })
         }
