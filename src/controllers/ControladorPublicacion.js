@@ -30,7 +30,7 @@ class ControladorPublicacion {
         }
     }
 
-    static async getPublicacionesPaginadas(req, res){
+    static async getPublicacionesPaginadas(req, res, next){
         const indice= req.params.indice;
 
         try{
@@ -39,10 +39,13 @@ class ControladorPublicacion {
             if(!publicaciones){
                 return res.status(404).json({error: 'No hay más publicaciones'});
             }
+            
             res.json(publicaciones);
         } catch(err) {
             res.status(500).json({error: 'No se pudieron recuperar las publicaciones'});
         }
+
+        next();
     }
 
     static async getPublicacionContenido(req, res) {
@@ -116,7 +119,7 @@ class ControladorPublicacion {
         }
     }
 
-    static async addComentario(req, res) {
+    static async addComentario(req, res, next) {
         const publicacionId = req.params.id;
 
         try {
@@ -128,13 +131,15 @@ class ControladorPublicacion {
 
             const publicacionActualizada = await PublicacionesDAO.agregarComentario(publicacionId, req.body);
 
-            res.json(publicacionActualizada);
+            res.status(200).json(publicacionActualizada);
         } catch (err) {
             res.status(500).json({ error: 'No se pudo agregar el comentario' })
         }
+
+        next();
     }
 
-    static async updateComentario(req, res) {
+    static async updateComentario(req, res, next) {
         const publicacionId = req.params.publicacionId;
         const comentarioId = req.params.comentarioId;
         
@@ -157,11 +162,13 @@ class ControladorPublicacion {
                 return res.status(404).json({ error: 'No se pudo encontrar el comentario' });
             }
 
-            res.json(comentarioActualizado);
+            res.status(200).json(comentarioActualizado);
 
         } catch (err) {
             res.status(500).json({ error: 'No se pudo actualizar el comentario' });
         }
+
+        next();
     }
 
     static async getComentario(req, res) {
@@ -180,7 +187,7 @@ class ControladorPublicacion {
         }
     }
 
-    static async deleteComentario(req, res) {
+    static async deleteComentario(req, res, next) {
         const publicacionId = req.params.publicacionId;
         const comentarioId = req.params.comentarioId;
         console.log(publicacionId,comentarioId )
@@ -197,6 +204,8 @@ class ControladorPublicacion {
         } catch (err) {
             res.status(500).json({ error: 'No se pudo eliminar el comentario' });
         }
+
+        next();
     }
 
 }

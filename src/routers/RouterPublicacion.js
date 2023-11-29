@@ -1,9 +1,26 @@
-const express = require('express')
+const express = require('express');
+const socketIo = require('socket.io');
+const http = require('http');
+const cors = require('cors');
+require('dotenv').config();
+
+const PORTWS= process.env.PORTWS;
+const app= express();
+app.use(cors());
+app.use(express.json());
+const server = http.createServer();
+const io = socketIo(server, {
+    cors: {
+      origin: 'http://127.0.0.1:5500', 
+      methods: ['GET', 'POST'],
+    },
+});
+
 const router = express.Router();
 const controladorPublicacion = require('../controllers/ControladorPublicacion')
 const validarPublicaciones = require('../middlewares/ValidarPublicaciones')
 
-require('dotenv').config();
+//require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const { validarCrearComentario } = require('../middlewares/ValidarComentarios');
 const ValidarComentarios = require('../middlewares/ValidarComentarios');
@@ -27,17 +44,39 @@ const verificarToken= (req, res, next)=>{
     }
 };
 
+io.on('connection', (socket) => {
+    console.log("Se ha conectado por web socket un cliente");
+});
+
+server.listen(PORTWS, ()=> {
+    console.log("WebSocket escuchando en el puerto: "+PORTWS);
+});
+
 router.post('/crear', verificarToken, validarPublicaciones.validarCrearPublicacion ,controladorPublicacion.addPublicacion);
 router.get('/:id', controladorPublicacion.getPublicacion);
 router.post('/search/contenido',  validarPublicaciones.validarObtenerPorContenido,controladorPublicacion.getPublicacionContenido);
 router.put('/:id', verificarToken, validarPublicaciones.validarEditarPublicacion, controladorPublicacion.updatePublicacion);
 router.delete('/:id', verificarToken, controladorPublicacion.deletePublicacion);
 router.get('/', controladorPublicacion.getAllPublicaciones);
-router.get('/paginada/:indice', controladorPublicacion.getPublicacionesPaginadas);
+router.get('/paginada/:indice', controladorPublicacion.getPublicacionesPaginadas, (req, res)=>{
+    io.emit('publicacionCreada', {mensaje: 'Publicación con id: '+req.params.indice+" actualizada"});
+});
 
-router.put('/:id/comentario', verificarToken, ValidarComentarios.validarCrearComentario, controladorPublicacion.addComentario);
+router.put('/:id/comentario', verificarToken, ValidarComentarios.validarCrearComentario, controladorPublicacion.addComentario, (req, res)=> {
+    if(res.statusCode==="200"){
+        io.emit('comentarioAgregado', {idPublicacion: req.params.id});
+    }
+});
 router.get('/comentario', controladorPublicacion.getComentario);
-router.put('/:publicacionId/comentario/:comentarioId', ValidarComentarios.validarEditarComentario, verificarToken, controladorPublicacion.updateComentario);
-router.delete('/:publicacionId/comentario/:comentarioId', verificarToken, ValidarComentarios.validarEliminarComentario, controladorPublicacion.deleteComentario);
+router.put('/:publicacionId/comentario/:comentarioId', ValidarComentarios.validarEditarComentario, verificarToken, controladorPublicacion.updateComentario, (req, res)=> {
+    if(res.statusCode==="200"){
+        io.emit('comentarioEditado', {idPublicacion: req.params.publicacionId});
+    }
+});
+router.delete('/:publicacionId/comentario/:comentarioId', verificarToken, ValidarComentarios.validarEliminarComentario, controladorPublicacion.deleteComentario, (req, res)=> {
+    if(res.statusCode==="204"){
+        io.emit('comentarioEliminado', {idPublicacion: req.params.publicacionId});
+    }
+});
 
 module.exports = router;
