@@ -116,12 +116,14 @@ class PublicacionesDAO {
     }
 
     static async eliminarComentario(publicacionId, comentarioId) {
+        console.log(publicacionId, comentarioId)
         try {
             const resultado = await Publicacion.findOneAndUpdate({
                 _id: publicacionId,
             }, {
                 $pull: { comentarios: { _id: comentarioId } }
             });
+            console.log(resultado);
         } catch (error) {
             throw error
         }

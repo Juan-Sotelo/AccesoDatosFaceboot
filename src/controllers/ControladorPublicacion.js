@@ -183,7 +183,7 @@ class ControladorPublicacion {
     static async deleteComentario(req, res) {
         const publicacionId = req.params.publicacionId;
         const comentarioId = req.params.comentarioId;
-
+        console.log(publicacionId,comentarioId )
         try {
             const publicacion = await PublicacionesDAO.obtener(publicacionId);
 
@@ -193,7 +193,7 @@ class ControladorPublicacion {
 
             const comentarioEliminado = await PublicacionesDAO.eliminarComentario(publicacionId, comentarioId);
 
-            res.status(204).send();
+            res.status(204).end();
         } catch (err) {
             res.status(500).json({ error: 'No se pudo eliminar el comentario' });
         }

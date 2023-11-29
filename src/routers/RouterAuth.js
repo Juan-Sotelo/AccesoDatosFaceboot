@@ -19,7 +19,6 @@ router.post('/iniciarSesion', validarUsuarios.validarInicioSesion, (req, res)=>{
                 contrasenia:resultado.contrasenia, 
                 sexo:resultado.sexo, 
                 fechaNacimiento:resultado.fechaNacimiento},llave,{expiresIn});
-            console.log(resultado);
             res.json(token);
         }
     })
