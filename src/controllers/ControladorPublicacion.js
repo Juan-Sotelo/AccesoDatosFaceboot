@@ -173,7 +173,7 @@ class ControladorPublicacion {
 
     static async getComentario(req, res) {
         const contenido = req.body.texto;
-        console.log(contenido)
+        //console.log(contenido)
         try {
             const comentario = await PublicacionesDAO.obtenerComentario(contenido);
 
@@ -219,7 +219,7 @@ class ControladorPublicacion {
             }
     
             res.json(comentarioMasReciente);
-            console.log(comentarioMasReciente);
+            //console.log(comentarioMasReciente);
         } catch (error) {
             console.error(error);
             res.status(500).json({ error: 'No se pudo obtener el comentario más reciente' });

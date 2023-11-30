@@ -155,7 +155,10 @@ class PublicacionesDAO {
             // Obtener el comentario más reciente (el primero después de ordenar)
             const comentarioMasReciente = comentariosOrdenados[0];
     
-            return comentarioMasReciente;
+            return {
+                publicacionId: publicacion._id,
+                comentario: comentarioMasReciente
+            };
         } catch (error) {
             throw error;
         }
