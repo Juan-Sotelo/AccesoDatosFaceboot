@@ -38,7 +38,7 @@ class ValidarComentarios {
         console.log("ea");
         const { publicacionId, comentarioId  } = req.params;
         console.log(publicacionId, comentarioId)
-        const camposEsperados = ['texto', 'img', 'usertag'];
+        const camposEsperados = ['texto', 'img', 'usertag', 'fechaCreacion'];
         const camposEnviados = Object.keys(req.body);
         
         const camposAdicionales = camposEnviados.filter((campo) => !camposEsperados.includes(campo));

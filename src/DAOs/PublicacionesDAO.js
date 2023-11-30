@@ -140,6 +140,26 @@ class PublicacionesDAO {
             throw error;
         }
     } 
+
+    static async obtenerComentarioMasReciente(publicacionId) {
+        try {
+            const publicacion = await Publicacion.findById(publicacionId);
+    
+            if (!publicacion) {
+                throw new Error('Publicación no encontrada');
+            }
+    
+            // Ordenar los comentarios por fecha de creación de forma descendente
+            const comentariosOrdenados = publicacion.comentarios.sort((a, b) => b.fechaCreacion - a.fechaCreacion);
+    
+            // Obtener el comentario más reciente (el primero después de ordenar)
+            const comentarioMasReciente = comentariosOrdenados[0];
+    
+            return comentarioMasReciente;
+        } catch (error) {
+            throw error;
+        }
+    }
 }
 
 module.exports = PublicacionesDAO;

@@ -58,25 +58,33 @@ router.post('/search/contenido',  validarPublicaciones.validarObtenerPorContenid
 router.put('/:id', verificarToken, validarPublicaciones.validarEditarPublicacion, controladorPublicacion.updatePublicacion);
 router.delete('/:id', verificarToken, controladorPublicacion.deletePublicacion);
 router.get('/', controladorPublicacion.getAllPublicaciones);
+router.get('/:id/nuevo', controladorPublicacion.obtenerComentarioMasReciente);
 router.get('/paginada/:indice', controladorPublicacion.getPublicacionesPaginadas, (req, res)=>{
     io.emit('publicacionCreada', {mensaje: 'Publicación con id: '+req.params.indice+" actualizada"});
 });
 
 router.put('/:id/comentario', verificarToken, ValidarComentarios.validarCrearComentario, controladorPublicacion.addComentario, (req, res)=> {
-    if(res.statusCode==="200"){
+ 
         io.emit('comentarioAgregado', {idPublicacion: req.params.id});
-    }
+    
 });
 router.get('/comentario', controladorPublicacion.getComentario);
 router.put('/:publicacionId/comentario/:comentarioId', ValidarComentarios.validarEditarComentario, verificarToken, controladorPublicacion.updateComentario, (req, res)=> {
-    if(res.statusCode==="200"){
-        io.emit('comentarioEditado', {idPublicacion: req.params.publicacionId});
-    }
+   
+        const { comentarioId } = req.params;
+        const { texto, img } = req.body;
+        console.log(texto, img)
+        io.emit('comentarioEditado', {
+            idComentario: comentarioId,
+            nuevoTexto: texto,
+            nuevaImagen: img
+        });
+  
 });
 router.delete('/:publicacionId/comentario/:comentarioId', verificarToken, ValidarComentarios.validarEliminarComentario, controladorPublicacion.deleteComentario, (req, res)=> {
-    if(res.statusCode==="204"){
-        io.emit('comentarioEliminado', {idPublicacion: req.params.publicacionId});
-    }
+   
+        io.emit('comentarioEliminado', {idComentario: req.params.comentarioId});
+
 });
 
 module.exports = router;
