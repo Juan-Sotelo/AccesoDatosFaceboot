@@ -116,12 +116,14 @@ class PublicacionesDAO {
     }
 
     static async eliminarComentario(publicacionId, comentarioId) {
+        console.log(publicacionId, comentarioId)
         try {
             const resultado = await Publicacion.findOneAndUpdate({
                 _id: publicacionId,
             }, {
                 $pull: { comentarios: { _id: comentarioId } }
             });
+            console.log(resultado);
         } catch (error) {
             throw error
         }
@@ -138,6 +140,29 @@ class PublicacionesDAO {
             throw error;
         }
     } 
+
+    static async obtenerComentarioMasReciente(publicacionId) {
+        try {
+            const publicacion = await Publicacion.findById(publicacionId);
+    
+            if (!publicacion) {
+                throw new Error('Publicación no encontrada');
+            }
+    
+            // Ordenar los comentarios por fecha de creación de forma descendente
+            const comentariosOrdenados = publicacion.comentarios.sort((a, b) => b.fechaCreacion - a.fechaCreacion);
+    
+            // Obtener el comentario más reciente (el primero después de ordenar)
+            const comentarioMasReciente = comentariosOrdenados[0];
+    
+            return {
+                publicacionId: publicacion._id,
+                comentario: comentarioMasReciente
+            };
+        } catch (error) {
+            throw error;
+        }
+    }
 }
 
 module.exports = PublicacionesDAO;

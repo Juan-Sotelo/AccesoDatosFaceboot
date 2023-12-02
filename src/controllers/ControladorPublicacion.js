@@ -30,19 +30,19 @@ class ControladorPublicacion {
         }
     }
 
-    static async getPublicacionesPaginadas(req, res, next){
-        const indice= req.params.indice;
+    static async getPublicacionesPaginadas(req, res, next) {
+        const indice = req.params.indice;
 
-        try{
-            const publicaciones= await PublicacionesDAO.consultaPaginadaPublicaciones(indice);
+        try {
+            const publicaciones = await PublicacionesDAO.consultaPaginadaPublicaciones(indice);
 
-            if(!publicaciones){
-                return res.status(404).json({error: 'No hay más publicaciones'});
+            if (!publicaciones) {
+                return res.status(404).json({ error: 'No hay más publicaciones' });
             }
-            
+
             res.json(publicaciones);
-        } catch(err) {
-            res.status(500).json({error: 'No se pudieron recuperar las publicaciones'});
+        } catch (err) {
+            res.status(500).json({ error: 'No se pudieron recuperar las publicaciones' });
         }
 
         next();
@@ -51,7 +51,7 @@ class ControladorPublicacion {
     static async getPublicacionContenido(req, res) {
 
         const contenido = req.body.texto;
-        
+
         try {
             const publicacion = await PublicacionesDAO.obtenerPorContenido(contenido);
 
@@ -142,11 +142,11 @@ class ControladorPublicacion {
     static async updateComentario(req, res, next) {
         const publicacionId = req.params.publicacionId;
         const comentarioId = req.params.comentarioId;
-        
+
         try {
-            
+
             const publicacion = await PublicacionesDAO.obtener(publicacionId);
-            
+
             if (!publicacion) {
                 return res.status(404).json({ error: 'ID de publicación no encontrada' });
             }
@@ -173,7 +173,7 @@ class ControladorPublicacion {
 
     static async getComentario(req, res) {
         const contenido = req.body.texto;
-        console.log(contenido)
+        //console.log(contenido)
         try {
             const comentario = await PublicacionesDAO.obtenerComentario(contenido);
 
@@ -190,7 +190,7 @@ class ControladorPublicacion {
     static async deleteComentario(req, res, next) {
         const publicacionId = req.params.publicacionId;
         const comentarioId = req.params.comentarioId;
-
+        console.log(publicacionId, comentarioId)
         try {
             const publicacion = await PublicacionesDAO.obtener(publicacionId);
 
@@ -200,12 +200,30 @@ class ControladorPublicacion {
 
             const comentarioEliminado = await PublicacionesDAO.eliminarComentario(publicacionId, comentarioId);
 
-            res.status(204).send();
+            res.status(204).end();
         } catch (err) {
             res.status(500).json({ error: 'No se pudo eliminar el comentario' });
         }
 
         next();
+    }
+
+    static async obtenerComentarioMasReciente(req, res) {
+        const publicacionId = req.params.id;
+        
+        try {
+            const comentarioMasReciente = await PublicacionesDAO.obtenerComentarioMasReciente(publicacionId);
+    
+            if (!comentarioMasReciente) {
+                return res.status(404).json({ error: 'No hay comentarios en la publicación' });
+            }
+    
+            res.json(comentarioMasReciente);
+            //console.log(comentarioMasReciente);
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: 'No se pudo obtener el comentario más reciente' });
+        }
     }
 
 }
