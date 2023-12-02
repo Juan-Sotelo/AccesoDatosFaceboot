@@ -36,7 +36,7 @@ const publicacionSchema = new Schema ({
     },
     texto: {
         type: String,
-        required: true
+        required: false
     },
     img: {
         type: String,

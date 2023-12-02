@@ -30,6 +30,15 @@ class UsuariosDAO {
         }
     }
 
+    static async obtenerPorUsertag(usertag) {
+        try {
+            const usuario = await Usuario.findOne({usertag:usertag})
+            return usuario
+        } catch (error) {
+            throw error
+        }
+    }
+
     static async obtenerRegistrado(username, contrasenia) {
         try {
             const usuario = await Usuario.findOne({ username:username, contrasenia:contrasenia }, {'_id': 0})
@@ -39,12 +48,12 @@ class UsuariosDAO {
         }
     }
     
-    static async editar(id, usuario) {
+    static async editar(usertag, nuevoUsuario) {
         try {
-            const usuarioEditado = await Usuario.findByIdAndUpdate(id, usuario)
-            return usuarioEditado
+            const usuarioEditado = await Usuario.findOneAndUpdate({ usertag: usertag }, nuevoUsuario, { new: true });
+            return usuarioEditado;
         } catch (error) {
-            throw error
+            throw error;
         }
     }
 

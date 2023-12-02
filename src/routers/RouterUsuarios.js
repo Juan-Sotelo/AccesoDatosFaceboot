@@ -2,6 +2,7 @@ const express = require('express');
 require('dotenv').config();
 const router = express.Router();
 const controladorUsuarios = require('../controllers/ControladorUsuarios');
+const validarUsuarios = require('../middlewares/ValidarUsuarios');
 const jwt = require('jsonwebtoken');
 const llave= process.env.LLAVE;
 
@@ -16,7 +17,11 @@ const verificarToken= (req, res, next)=>{
     try{
         const tokenSinBearer= token.split(" ")[1];
         const decoded= jwt.verify(tokenSinBearer, llave);
-        if(req.body.usertag!=decoded.userId){
+        
+        console.log(req.body.usertag);
+        console.log(decoded.userId);
+        console.log(req.query.usertag);
+        if(req.body.usertag !== decoded.userId && req.query.usertag !== decoded.userId){
             return res.status(401).json({error: 'Usuario del token diferente al de la solicitud'});
         }
         next();
@@ -25,7 +30,8 @@ const verificarToken= (req, res, next)=>{
     }
 };
 
-router.post('/registrarUsuario', controladorUsuarios.addUsuario);
-router.put('/editar',verificarToken, controladorUsuarios.updateUsuario);
+router.post('/', validarUsuarios.validarRegistrarUsuario, controladorUsuarios.addUsuario);
+router.put('/editar',verificarToken, validarUsuarios.validarEditarUsuario, controladorUsuarios.updateUsuario);
+router.get('/',verificarToken, controladorUsuarios.obtenerUsuario)
 
 module.exports = router;

@@ -23,7 +23,7 @@ class PublicacionesDAO {
 
     static async obtenerPorContenido(contenido) {
         try {
-            const publicacion = await Publicacion.findOne({ texto: contenido });
+            const publicacion = await Publicacion.find({ texto: contenido });
             return publicacion;
         } catch (error) {
             throw error
@@ -127,6 +127,17 @@ class PublicacionesDAO {
         }
 
     }
+
+    static async consultaPaginadaPublicaciones(pagina){
+        var porPagina= 3;
+        var indiceInicio= (pagina-1)*porPagina;
+        try{
+            const resultado= await Publicacion.find({}).skip(indiceInicio).limit(porPagina);
+            return resultado;
+        } catch(error){
+            throw error;
+        }
+    } 
 }
 
 module.exports = PublicacionesDAO;

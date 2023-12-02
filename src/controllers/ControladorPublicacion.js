@@ -6,7 +6,7 @@ require('../database/database');
 class ControladorPublicacion {
     static async addPublicacion(req, res) {
         try {
-            
+            console.log(req.body);
             const publicacionGuardada = await PublicacionesDAO.registrar(req.body);
 
             res.status(201).json(publicacionGuardada);
@@ -30,7 +30,26 @@ class ControladorPublicacion {
         }
     }
 
+    static async getPublicacionesPaginadas(req, res, next){
+        const indice= req.params.indice;
+
+        try{
+            const publicaciones= await PublicacionesDAO.consultaPaginadaPublicaciones(indice);
+
+            if(!publicaciones){
+                return res.status(404).json({error: 'No hay más publicaciones'});
+            }
+            
+            res.json(publicaciones);
+        } catch(err) {
+            res.status(500).json({error: 'No se pudieron recuperar las publicaciones'});
+        }
+
+        next();
+    }
+
     static async getPublicacionContenido(req, res) {
+
         const contenido = req.body.texto;
         
         try {
@@ -42,6 +61,7 @@ class ControladorPublicacion {
 
             res.json(publicacion);
         } catch (error) {
+            console.log(error);
             res.status(500).json({ error: 'No se pudo obtener la publicación por contenido' });
         }
     }
@@ -93,13 +113,13 @@ class ControladorPublicacion {
 
             const publicacionEliminada = await PublicacionesDAO.eliminar(publicacionId);
 
-            res.status(204).send();
+            res.status(204).end();
         } catch (err) {
             res.status(500).json({ error: 'No se pudo eliminar la publicación' })
         }
     }
 
-    static async addComentario(req, res) {
+    static async addComentario(req, res, next) {
         const publicacionId = req.params.id;
 
         try {
@@ -111,25 +131,27 @@ class ControladorPublicacion {
 
             const publicacionActualizada = await PublicacionesDAO.agregarComentario(publicacionId, req.body);
 
-            res.json(publicacionActualizada);
+            res.status(200).json(publicacionActualizada);
         } catch (err) {
             res.status(500).json({ error: 'No se pudo agregar el comentario' })
         }
+
+        next();
     }
 
-    static async updateComentario(req, res) {
+    static async updateComentario(req, res, next) {
         const publicacionId = req.params.publicacionId;
         const comentarioId = req.params.comentarioId;
-
+        
         try {
+            
             const publicacion = await PublicacionesDAO.obtener(publicacionId);
-
+            
             if (!publicacion) {
                 return res.status(404).json({ error: 'ID de publicación no encontrada' });
             }
 
             const comentario = {
-                usuarioID: req.user._id,
                 texto: req.body.texto,
                 img: req.body.img
             }
@@ -140,11 +162,13 @@ class ControladorPublicacion {
                 return res.status(404).json({ error: 'No se pudo encontrar el comentario' });
             }
 
-            res.json(comentarioActualizado);
+            res.status(200).json(comentarioActualizado);
 
         } catch (err) {
             res.status(500).json({ error: 'No se pudo actualizar el comentario' });
         }
+
+        next();
     }
 
     static async getComentario(req, res) {
@@ -163,7 +187,7 @@ class ControladorPublicacion {
         }
     }
 
-    static async deleteComentario(req, res) {
+    static async deleteComentario(req, res, next) {
         const publicacionId = req.params.publicacionId;
         const comentarioId = req.params.comentarioId;
 
@@ -180,6 +204,8 @@ class ControladorPublicacion {
         } catch (err) {
             res.status(500).json({ error: 'No se pudo eliminar el comentario' });
         }
+
+        next();
     }
 
 }
